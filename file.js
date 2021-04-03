@@ -1,9 +1,24 @@
+const preloader = document.getElementById("preloader");
+setTimeout(() => {
+  let content = document.getElementById("content");
+  preloader.style.display = ("none");
+content.style.display = ("block");
+}, 500)
+
+window.setTimeout(function(){
 let body = document.body;
 let string = window.location.search;
 let url = 'https://api.github.com/users/Liubovminakova';
+const date = new Date();
+const getDate = new Promise((resolve,reject)=>{
+setTimeout(() => date ? resolve(date) : reject('Ошибка'), 1000)
+})
+const getUrl = new Promise((resolve,reject)=>{
+setTimeout(() => url ? resolve(url) : reject('Ошибка'), 1000)
+})
 
-
-fetch(url)
+Promise.all ([getUrl, getDate])
+.then (([url, date]) => fetch(url))
     .then(res => res.json())
     .then(json => {
         console.log(json.avatar_url);
@@ -31,6 +46,8 @@ fetch(url)
             bio.innerHTML = 'Информация о пользователе недоступна';
         }
         body.append(bio);
+        body.append(date)
 
     })
-    .catch(err => alert('Информация о пользователе недоступна'));
+    .catch(err => console.log('Информация о пользователе недоступна'));
+  });
